@@ -1,0 +1,9 @@
+name: KFCounter
+description: Hello-world project on Buildkite plugins
+author: https://github.com/karensawrey
+requirements: []
+configuration:
+  properties:
+    pattern:
+      type: string
+  additionalProperties: false

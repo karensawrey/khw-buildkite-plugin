@@ -1,0 +1,14 @@
+steps:
+  - label: "Hello🌎"
+    plugins:
+      - plugin-tester#v1.1.0: ~
+
+  - label: ":sparkles: lint"
+    plugins:
+      - plugin-linter#v3.2.0:
+          id: khw
+
+  - label: ":shell: Shellcheck"
+    plugins:
+      - shellcheck#v1.3.0:
+          files: hooks/**
