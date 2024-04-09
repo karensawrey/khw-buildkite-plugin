@@ -2,4 +2,41 @@
 
 set -euo pipefail
 
-echo "Hello world!"
+echo "Let's see if the README is using BE or AE"
+
+# American & British spelling dictionary
+american_words=(
+  "color" "center" "honor" "theater" "flavor" "aluminum" "favorite" "program"
+  "labor" "partner" "traveler" "jewelry" "kilometer" "liter" "meter" "organization"
+  "cancelled" "practice" "realised" "analyse" "optimisation" "analogue" "civilization"
+  "manoeuvre" "grey" "offense" "defense" "judgment" "enrollment" "vacation" "ambulance"
+  "skeletal" "toward" "donut" "truck" "cookies" "pants"  "crazy" "ranch"
+)
+british_words=(
+  "colour" "centre" "honour" "theatre" "flavour" "aluminium" "favourite" "programme"
+  "labour" "partner" "traveller" "jewellery" "kilometre" "litre" "metre" "organisation"
+  "cancelled" "practise" "realised" "analyse" "optimisation" "analogue" "civilisation"
+  "manoeuvre" "gray" "offence" "defence" "judgement" "enrolment" "holiday" "ambulance"
+  "skeletal" "towards" "doughnut" "lorry" "biscuits" "trousers" "crazy" "ranch"
+)
+
+# check what's up in the readme
+function count_words() {
+  local word_list="$1"
+  grep -Eo "[[:alpha:]]+" README.md | tr '[[:upper:]]' '[[:lower:]]' | grep -c -w "$word_list"
+}
+
+# Counting occurrences of AE and BE words
+american_count=$(count_words "${american_words[@]}")
+british_count=$(count_words "${british_words[@]}")
+
+# Determine the result based on word counts
+if [[ $american_count -gt 0 && $british_count -eq 0 ]]; then
+  echo "American English"
+elif [[ $american_count -eq 0 && $british_count -gt 0 ]]; then
+  echo "British English"
+elif [[ $american_count -gt 0 && $british_count -gt 0 ]]; then
+  echo "Both"
+else
+  echo "Impossible to determine"
+fi
