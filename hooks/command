@@ -23,7 +23,9 @@ british_words=(
 # check what's up in the readme
 function count_words() {
   local word_list="$1"
-  grep -Eo "[[:alpha:]]+" README.md | tr '[[:upper:]]' '[[:lower:]]' | grep -c -w "$word_list"
+
+# Converting README.md to lowercase before processing
+  tr '[[:upper:]]' '[[:lower:]]' < README.md | grep -Eo "[[:alpha:]]+" | grep -c -w "$word_list"
 }
 
 # Counting occurrences of AE and BE words
