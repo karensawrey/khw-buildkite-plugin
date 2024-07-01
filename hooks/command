@@ -2,5 +2,5 @@
 
 set -euo pipefail
 
-echo "Let's see if the README is using American or British English"
+echo "Hello World"
 
