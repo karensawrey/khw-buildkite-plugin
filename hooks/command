@@ -2,40 +2,43 @@
 
 set -euo pipefail
 
-echo "Let's see if the README is using BE or AE"
+echo "Let's see if the README is using American or British English"
 
 # American & British spelling dictionary
 american_words=(
   "color" "center" "honor" "theater" "flavor" "aluminum" "favorite" "program"
-  "labor" "partner" "traveler" "jewelry" "kilometer" "liter" "meter" "organization"
-  "cancelled" "practice" "realised" "analyse" "optimisation" "analogue" "civilization"
-  "manoeuvre" "grey" "offense" "defense" "judgment" "enrollment" "vacation" "ambulance"
-  "skeletal" "toward" "donut" "truck" "cookies" "pants"  "crazy" "ranch"
+  "labor" "traveler" "jewelry" "kilometer" "liter" "meter" "organization"
+  "canceled" "practice" "realized" "analyze" "optimization" "analog" "civilization"
+  "maneuver" "gray" "offense" "defense" "judgment" "enrollment" "vacation" "skeletal"
+  "toward" "donut" "truck" "cookies" "pants"  "crazy" "ranch"
 )
 british_words=(
   "colour" "centre" "honour" "theatre" "flavour" "aluminium" "favourite" "programme"
-  "labour" "partner" "traveller" "jewellery" "kilometre" "litre" "metre" "organisation"
+  "labour" "traveller" "jewellery" "kilometre" "litre" "metre" "organisation"
   "cancelled" "practise" "realised" "analyse" "optimisation" "analogue" "civilisation"
-  "manoeuvre" "gray" "offence" "defence" "judgement" "enrolment" "holiday" "ambulance"
-  "skeletal" "towards" "doughnut" "lorry" "biscuits" "trousers" "crazy" "ranch"
+  "manoeuvre" "grey" "offence" "defence" "judgement" "enrolment" "holiday" "ambulance"
+  "skeletal" "towards" "doughnut" "lorry" "biscuits" "trousers" "mad" "ranch"
 )
 
-# checking what's up in the readme
-function count_words() {
-  local word_list="$1"
+# Fetching README content [dirty hack with providing the full path]
+readme_content=$(curl -s https://raw.githubusercontent.com/karensawrey/khw-buildkite-plugin/main/README.md | tr '[:upper:]' '[:lower:]')
 
-# fetching README content [dirty hack with providing the full path]
-  curl -s https://raw.githubusercontent.com/karensawrey/khw-buildkite-plugin/main/README.md | \
-    tr '[[:upper:]]' '[[:lower:]]' | \
-    grep -Eo "[[:alpha:]]+" | \
-    grep -c -w "$word_list"
+# Function to count words in the content
+function count_words() {
+  local -n words=$1
+  local count=0
+  for word in "${words[@]}"; 
+  do
+    count=$((count + $(grep -o -w "$word" <<< "$readme_content" | wc -l)))
+  done
+  echo $count
 }
 
-# counting occurrences of AE and BE words
-american_count=$(count_words "${american_words[@]}")
-british_count=$(count_words "${british_words[@]}")
+# Counting occurrences of American and British words
+american_count=$(count_words american_words)
+british_count=$(count_words british_words)
 
-# determining the result based on word counts
+# Determining the result based on word counts
 if [[ $american_count -gt $british_count ]]; then
   echo "American English"
 elif [[ $british_count -gt $american_count ]]; then
