@@ -20,28 +20,26 @@ british_words=(
   "skeletal" "towards" "doughnut" "lorry" "biscuits" "trousers" "crazy" "ranch"
 )
 
-# check what's up in the readme
+# checking what's up in the readme
 function count_words() {
   local word_list="$1"
 
-  # Fetch README content using curl
+# fetching README content [dirty hack with providing the full path]
   curl -s https://raw.githubusercontent.com/karensawrey/khw-buildkite-plugin/main/README.md | \
     tr '[[:upper:]]' '[[:lower:]]' | \
     grep -Eo "[[:alpha:]]+" | \
     grep -c -w "$word_list"
 }
 
-# Counting occurrences of AE and BE words
+# counging occurrences of AE and BE words
 american_count=$(count_words "${american_words[@]}")
 british_count=$(count_words "${british_words[@]}")
 
 # Determine the result based on word counts
-if [[ $american_count -gt 0 && $british_count -eq 0 ]]; then
+if [[ $american_count -gt $british_count ]]; then
   echo "American English"
-elif [[ $american_count -eq 0 && $british_count -gt 0 ]]; then
+elif [[ $british_count -gt $american_count ]]; then
   echo "British English"
-elif [[ $american_count -gt 0 && $british_count -gt 0 ]]; then
-  echo "Both"
 else
-  echo "Impossible to determine"
+  echo "Both or impossible to determine"
 fi
