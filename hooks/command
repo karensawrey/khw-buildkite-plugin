@@ -31,11 +31,11 @@ function count_words() {
     grep -c -w "$word_list"
 }
 
-# counging occurrences of AE and BE words
+# counting occurrences of AE and BE words
 american_count=$(count_words "${american_words[@]}")
 british_count=$(count_words "${british_words[@]}")
 
-# Determine the result based on word counts
+# determining the result based on word counts
 if [[ $american_count -gt $british_count ]]; then
   echo "American English"
 elif [[ $british_count -gt $american_count ]]; then
