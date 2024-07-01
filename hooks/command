@@ -24,8 +24,11 @@ british_words=(
 function count_words() {
   local word_list="$1"
 
-# Converting README.md to lowercase before processing
-  tr '[[:upper:]]' '[[:lower:]]' < README.md | grep -Eo "[[:alpha:]]+" | grep -c -w "$word_list"
+  # Fetch README content using curl
+  curl -s https://raw.githubusercontent.com/karensawrey/khw-buildkite-plugin/main/README.md | \
+    tr '[[:upper:]]' '[[:lower:]]' | \
+    grep -Eo "[[:alpha:]]+" | \
+    grep -c -w "$word_list"
 }
 
 # Counting occurrences of AE and BE words
