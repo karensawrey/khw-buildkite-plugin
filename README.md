@@ -14,3 +14,7 @@ steps:
 ## License
 
 [GNU Linense](https://www.gnu.org/licenses/gpl-3.0.en.html)
+
+## Trigger words
+
+The colour and the flavour of this README is positively British.
