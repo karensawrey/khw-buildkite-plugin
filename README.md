@@ -8,7 +8,7 @@ steps:
   # Run the included simple-command script that echos
   - command: simple-command
     plugins:
-      - karensawrey/khw#v.1.1.0: ~
+      - karensawrey/khw#v.1.1.1: ~
 ```
 
 ## License
